@@ -68,3 +68,53 @@ Authenticates a user using the email and password. Returns an authentication tok
   - For invalid credentials: `{ "error": "Invalid email or password" }`
   - For validation errors: `{ "errors": [ ... ] }`
 
+## GET /users/profile
+
+### Description
+Retrieves the authenticated user's profile. Requires a valid authentication token sent via cookies or authorization header.
+
+### Headers
+- Authorization: Bearer {token} (optional if using cookies)
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:  
+```json
+{
+  "required": { /* user profile details */ }
+}
+```
+
+#### Error
+- **Status Code**: 401 Unauthorized  
+- **Response Body**:  
+```json
+{ "error": "unauthorized" }
+```
+
+## GET /users/logout
+
+### Description
+Logs out the authenticated user by clearing the token cookie and blacklisting the token.
+
+### Headers
+- Authorization: Bearer {token} (optional if using cookies)
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:  
+```json
+{ "message": "Logout successfully" }
+```
+
+#### Error
+- **Status Code**: 401 Unauthorized  
+- **Response Body**:  
+```json
+{ "error": "unauthorized" }
+```
+
