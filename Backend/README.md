@@ -216,3 +216,112 @@ Registers a new captain along with vehicle details. On success, returns an authe
 }
 ```
 
+# Captain Authentication API Documentation
+
+## POST /captains/login
+
+### Description
+Authenticates a captain using the email and password. Returns an authentication token and the captain's details upon successful login.
+
+### Request Body
+- **email**: Required, string, must be a valid email address.
+- **password**: Required, string, minimum 6 characters.
+
+#### Example Request
+```json
+{
+  "email": "alice.smith@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ789",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "_id": "captain_id_here"
+  }
+}
+```
+
+#### Invalid Credentials or Validation Error
+- **Status Code**: 401 Unauthorized or 400 Bad Request
+- **Response Body**:
+For invalid credentials:
+```json
+{ "error": "Invalid email or password" }
+```
+For validation errors:
+```json
+{ "errors": [ { "msg": "Validation error message", "param": "field_name", "location": "body" } ] }
+```
+
+## GET /captains/profile
+
+### Description
+Retrieves the profile of the authenticated captain. Requires a valid authentication token provided via cookies or the Authorization header.
+
+### Headers
+- **Authorization**: Bearer {token} (optional if using cookies)
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+```json
+{
+  "captain": {
+    // captain profile details
+  }
+}
+```
+
+#### Error
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+```json
+{ "error": "unauthorized" }
+```
+
+## GET /captains/logout
+
+### Description
+Logs out the authenticated captain by clearing the token cookie and blacklisting the token.
+
+### Headers
+- **Authorization**: Bearer {token} (optional if using cookies)
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+```json
+{ "message": "Logged out successfully" }
+```
+
+#### Error
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+```json
+{ "error": "unauthorized" }
+```
+
